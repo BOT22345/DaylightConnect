@@ -1,2 +1,2 @@
 # DaylightConnect
-Creating a full stack chat application, with sunrise and sunSet theme 
+Full stack chat application, with sunrise and sunSet theme 
