@@ -1,23 +1,26 @@
 import React, { useState } from 'react'
 import GenderCheckBox from './GenderCheckBox'
 import { Link } from 'react-router-dom'
+import useSignup from '../../hooks/useSignup';
 
 const SignUp = () => {
   const [inputs,setInputs]=useState({
     fullname:"",
     username:"",
     password:"",
-    confirmpassword:"",
+    confirmPassword:"",
     gender:""
   });
 
   const handleCheckboxChange=(gender)=>{
     setInputs({...inputs,gender})
   }
+  const {loading,signup}=useSignup();
 
-  const handleSubmit=(e)=>{
+  const handleSubmit=async (e)=>{
     e.preventDefault();
     console.log(inputs) 
+    await signup(inputs)
   }
   return (
   <div className='flex flex-col items-center justify-center min-w-96 mx-auto'>
@@ -52,7 +55,7 @@ const SignUp = () => {
           <label className='label'>
             <span className="text-base label-text mt-2">Confrim Password</span>
           </label>
-          <input type="password" placeholder="Confirm Your Password" value={inputs.confirmpassword} onChange={(e)=>setInputs({...inputs,confirmpassword:e.target.value})} className='w-full input-bordered h-10'></input>
+          <input type="password" placeholder="Confirm Your Password" value={inputs.confirmPassword} onChange={(e)=>setInputs({...inputs,confirmPassword:e.target.value})} className='w-full input-bordered h-10'></input>
         </div>
 
         <GenderCheckBox onCheckboxChange={handleCheckboxChange} selectedGender={inputs.gender}></GenderCheckBox>
