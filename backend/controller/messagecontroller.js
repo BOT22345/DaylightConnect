@@ -1,5 +1,6 @@
 import Conversation from "../models/coversation.model.js";
 import Message from "../models/message.model.js";
+import { getReceiverSocketId, io } from "../socket/socket.js";
 export const sendMessage=async (req,res)=>{
     try {
         
@@ -27,13 +28,19 @@ export const sendMessage=async (req,res)=>{
             conversation.messages.push(newMessage._id);
         }
 
-
-        //socket io functionallity here to be added later
-
         // await conversation.save();
         // await newMessage.save();
 
         await Promise.all([conversation.save(),newMessage.save()]);
+
+        //socket io functionallity here to be added later
+        const receiverSocketId=getReceiverSocketId(receiverId);
+
+        if(receiverSocketId){
+            //io.to is used to send the event to specific user not all  like earlier
+            io.to(receiverSocketId).emit("newMessage",newMessage)
+        }
+
         res.status(201).json(newMessage)
     } catch (error) {
         console.log("Error in send message controller",error.message);
